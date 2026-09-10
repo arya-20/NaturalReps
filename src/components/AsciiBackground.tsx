@@ -17,8 +17,8 @@ import { useEffect, useRef } from "react";
  * /public and the loader will sample that instead.
  */
 
-const CELL = 10; // cellSize — denser grid for photo detail
-const CONTRAST = 15; // lift contrast a touch so the statue pops from black
+const CELL = 7; // cellSize — smaller = higher resolution
+const CONTRAST = 45; // punchier separation of the statue from black
 const TINT = { r: 60, g: 166, b: 255 }; // #3ca6ff
 const ANIM_SPEED = 1.0;
 const ANIM_INTENSITY = 0.35; // gentler so the subject stays legible
