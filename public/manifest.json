@@ -1,11 +1,11 @@
 {
-  "name": "Gym AI",
-  "short_name": "Gym AI",
-  "description": "Log your workouts in plain English.",
+  "name": "NaturalReps",
+  "short_name": "NaturalReps",
+  "description": "Log your workouts in plain English. AI does the rest.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
+  "background_color": "#05070a",
+  "theme_color": "#05070a",
   "icons": [
     {
       "src": "/icon.svg",
