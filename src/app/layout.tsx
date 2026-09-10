@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SettingsProvider } from "@/lib/settings";
 import AsciiBackground from "@/components/AsciiBackground";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
@@ -20,21 +20,30 @@ export const metadata: Metadata = {
     "Log your workouts in plain English or by voice. AI turns it into clean, structured training data.",
   manifest: "/manifest.json",
   icons: { icon: "/icon.svg" },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "NaturalReps" },
 };
 
 export const viewport = {
   themeColor: "#05070a",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover" as const,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-dvh">
         <AsciiBackground />
-        <SettingsProvider>{children}</SettingsProvider>
+        {/* iPhone-format app frame */}
+        <div className="relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col bg-neutral-950/70 shadow-2xl shadow-black/50 ring-1 ring-white/5 backdrop-blur-xl">
+          <SettingsProvider>{children}</SettingsProvider>
+        </div>
       </body>
     </html>
   );

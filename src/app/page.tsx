@@ -21,14 +21,14 @@ export default function Home() {
   }, [refresh]);
 
   return (
-    <div className="min-h-dvh">
-      <header className="mx-auto max-w-2xl px-4 pt-8">
-        <h1 className="text-xl font-bold tracking-tight">
-          Natural<span className="text-[#3ca6ff]">Reps</span>
+    <div className="flex min-h-dvh flex-1 flex-col">
+      <header className="px-5 pt-[calc(env(safe-area-inset-top)+1.25rem)]">
+        <h1 className="text-[15px] font-semibold uppercase tracking-[0.25em] text-neutral-200">
+          naturalreps
         </h1>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 pb-28 pt-4">
+      <main className="flex-1 px-5 pb-28 pt-5">
         {tab === "home" && (
           <HomeScreen history={history} onChanged={refresh} />
         )}

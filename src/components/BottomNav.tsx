@@ -35,8 +35,8 @@ export default function BottomNav({
   onChange: (t: Tab) => void;
 }) {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-neutral-800 bg-neutral-950/80 backdrop-blur-lg">
-      <ul className="mx-auto flex max-w-2xl items-stretch justify-around">
+    <nav className="fixed inset-x-0 bottom-0 z-20 mx-auto w-full max-w-[430px] border-t border-white/5 bg-neutral-950/70 pb-[env(safe-area-inset-bottom)] backdrop-blur-2xl">
+      <ul className="flex items-stretch justify-around">
         {items.map((it) => {
           const isActive = active === it.id;
           const isPost = it.id === "post";
