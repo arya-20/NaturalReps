@@ -6,9 +6,7 @@ const items: { id: Tab; label: string; icon: React.ReactElement }[] = [
   {
     id: "home",
     label: "Home",
-    icon: (
-      <path d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5" />
-    ),
+    icon: <path d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5" />,
   },
   {
     id: "post",
@@ -35,27 +33,48 @@ export default function BottomNav({
   onChange: (t: Tab) => void;
 }) {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-20 mx-auto w-full max-w-[430px] border-t border-white/5 bg-neutral-950/70 pb-[env(safe-area-inset-bottom)] backdrop-blur-2xl">
-      <ul className="flex items-stretch justify-around">
-        {items.map((it) => {
-          const isActive = active === it.id;
-          const isPost = it.id === "post";
-          return (
-            <li key={it.id} className="flex-1">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 mx-auto flex w-full max-w-[430px] justify-center pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+      {/* luminous backlight */}
+      <div
+        aria-hidden
+        className="absolute bottom-6 left-1/2 h-16 w-4/5 -translate-x-1/2 rounded-full bg-white/20 blur-2xl"
+      />
+
+      <nav className="pointer-events-auto relative">
+        {/* liquid-glass pill */}
+        <div className="relative flex items-center gap-1 rounded-full border border-white/25 bg-white/10 p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-2xl backdrop-saturate-150">
+          {/* soft top-gloss gradient */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-b from-white/35 via-white/5 to-transparent"
+          />
+          {/* inner hairline highlight */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-px rounded-full ring-1 ring-inset ring-white/10"
+          />
+
+          {items.map((it) => {
+            const isActive = active === it.id;
+            return (
               <button
+                key={it.id}
                 onClick={() => onChange(it.id)}
                 aria-label={it.label}
                 aria-current={isActive}
-                className="flex w-full flex-col items-center gap-1 py-2.5"
+                className="relative flex flex-col items-center gap-0.5 rounded-full px-5 py-2 transition-colors"
               >
+                {/* active liquid-glass highlight bubble */}
+                {isActive && (
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 rounded-full border border-white/40 bg-white/25 shadow-[inset_0_1px_1px_rgba(255,255,255,0.5),0_2px_8px_rgba(255,255,255,0.15)] backdrop-blur-md"
+                  />
+                )}
                 <span
-                  className={
-                    isPost
-                      ? "flex h-11 w-11 -translate-y-3 items-center justify-center rounded-full bg-white text-black shadow-lg shadow-white/10"
-                      : `flex h-6 w-6 items-center justify-center ${
-                          isActive ? "text-white" : "text-neutral-500"
-                        }`
-                  }
+                  className={`relative flex h-6 w-6 items-center justify-center transition-colors ${
+                    isActive ? "text-white" : "text-white/55"
+                  }`}
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -64,23 +83,23 @@ export default function BottomNav({
                     strokeWidth={2}
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={isPost ? "h-6 w-6" : "h-6 w-6"}
+                    className="h-[22px] w-[22px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"
                   >
                     {it.icon}
                   </svg>
                 </span>
                 <span
-                  className={`text-[11px] ${
-                    isActive ? "text-white" : "text-neutral-500"
-                  } ${isPost ? "-translate-y-2" : ""}`}
+                  className={`relative text-[10px] font-medium tracking-wide transition-colors ${
+                    isActive ? "text-white" : "text-white/50"
+                  }`}
                 >
                   {it.label}
                 </span>
               </button>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+            );
+          })}
+        </div>
+      </nav>
+    </div>
   );
 }
