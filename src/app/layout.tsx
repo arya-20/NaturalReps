@@ -38,10 +38,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-dvh">
-        <AsciiBackground />
+      <body className="min-h-dvh bg-black">
         {/* iPhone-format app frame */}
-        <div className="relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col bg-neutral-950/70 shadow-2xl shadow-black/50 ring-1 ring-white/5 backdrop-blur-xl">
+        <div className="relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col overflow-hidden shadow-2xl shadow-black/50 ring-1 ring-white/5">
+          <AsciiBackground />
+          {/* subtle darkening for text legibility over the background */}
+          <div className="pointer-events-none absolute inset-0 -z-[5] bg-black/35" />
           <SettingsProvider>{children}</SettingsProvider>
         </div>
       </body>

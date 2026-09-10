@@ -149,8 +149,12 @@ export default function AsciiBackground() {
     }
 
     function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
+      const parent = canvas!.parentElement;
+      const rect = parent
+        ? parent.getBoundingClientRect()
+        : { width: window.innerWidth, height: window.innerHeight };
+      width = Math.max(1, Math.floor(rect.width));
+      height = Math.max(1, Math.floor(rect.height));
       canvas!.width = Math.floor(width * dpr);
       canvas!.height = Math.floor(height * dpr);
       canvas!.style.width = width + "px";
@@ -173,6 +177,12 @@ export default function AsciiBackground() {
     }
     resize();
     window.addEventListener("resize", resize);
+
+    let ro: ResizeObserver | null = null;
+    if (canvas.parentElement && "ResizeObserver" in window) {
+      ro = new ResizeObserver(() => resize());
+      ro.observe(canvas.parentElement);
+    }
 
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -203,9 +213,16 @@ export default function AsciiBackground() {
           const ny = cy / rows - oy;
           const dist = Math.sqrt(nx * nx + ny * ny);
           const wave = Math.sin(dist * 24 - t * 2.2) * 0.5 + 0.5;
+          // faint ambient floor so dark regions still show subtle glyphs,
+          // plus a ripple shimmer that is visible even where the image is black
+          const ambient = 0.06 + 0.05 * wave;
           const lum = Math.min(
             1,
-            base * (1 - ANIM_INTENSITY * 0.45) + base * wave * ANIM_INTENSITY * 0.7
+            Math.max(
+              ambient,
+              base * (1 - ANIM_INTENSITY * 0.45) +
+                base * wave * ANIM_INTENSITY * 0.7
+            )
           );
 
           const idx = Math.min(
@@ -259,6 +276,7 @@ export default function AsciiBackground() {
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", resize);
+      ro?.disconnect();
     };
   }, []);
 
@@ -266,7 +284,7 @@ export default function AsciiBackground() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none fixed inset-0 -z-10"
+      className="pointer-events-none absolute inset-0 -z-10"
     />
   );
 }
