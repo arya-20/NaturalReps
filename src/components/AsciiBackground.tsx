@@ -284,7 +284,7 @@ export default function AsciiBackground() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none absolute inset-0 -z-10"
+      className="pointer-events-none absolute inset-0 z-0"
     />
   );
 }

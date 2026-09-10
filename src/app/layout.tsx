@@ -43,8 +43,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <div className="relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col overflow-hidden shadow-2xl shadow-black/50 ring-1 ring-white/5">
           <AsciiBackground />
           {/* subtle darkening for text legibility over the background */}
-          <div className="pointer-events-none absolute inset-0 -z-[5] bg-black/35" />
-          <SettingsProvider>{children}</SettingsProvider>
+          <div className="pointer-events-none absolute inset-0 z-[1] bg-black/35" />
+          <div className="relative z-10 flex min-h-dvh flex-1 flex-col">
+            <SettingsProvider>{children}</SettingsProvider>
+          </div>
         </div>
       </body>
     </html>
