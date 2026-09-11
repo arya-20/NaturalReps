@@ -2,6 +2,23 @@
 
 _A working brief for the app. Not committed secrets — keep real keys out of this file._
 
+## One-line description (for non-technical readers)
+**NaturalReps is a phone app where you describe your gym workout in plain English (or by speaking) and AI instantly turns it into a clean, organised log — built with TypeScript and Next.js, powered by OpenAI, and hosted on Vercel.**
+
+## Where everything lives (quick reference for next session)
+| Thing | Location |
+|---|---|
+| Live app (hosting) | **Vercel** → https://natural-reps.vercel.app |
+| Source code (git) | **GitHub** → https://github.com/arya-20/NaturalReps |
+| Local project folder | `~/Library/CloudStorage/OneDrive-BTPlc/Desktop/portfolio/gym-ai` |
+| Background source image (in app) | `portfolio/gym-ai/public/statue.png` |
+| Background source image (spare copy) | `portfolio/gym-ai/images.png` (kept for reference) |
+| Original image on Desktop | moved to `Desktop/portfolio/images.png` |
+| OpenAI API key (server) | **Vercel** → Project → Settings → Environment Variables → `OPENAI_API_KEY` |
+| OpenAI API key (local dev) | `portfolio/gym-ai/.env.local` (git-ignored; copy from `.env.example`) |
+| Deploy trigger | any `git push` to `main` → Vercel auto-deploys |
+| Headless screenshot tool (for visual checks) | Microsoft Edge at `/Applications/Microsoft Edge.app` (Chromium; use `--headless=new --screenshot=`) |
+
 ## What it is
 An AI-powered gym workout logger. Users describe a workout in plain English (or by
 voice); an LLM parses it into structured, editable training data. Built as a PWA so
