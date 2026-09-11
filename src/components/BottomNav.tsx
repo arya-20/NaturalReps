@@ -34,19 +34,19 @@ export default function BottomNav({
 }) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 mx-auto flex w-full max-w-[430px] justify-center pb-[calc(env(safe-area-inset-bottom)+1rem)]">
-      {/* luminous backlight */}
+      {/* luminous backlight (subtle) */}
       <div
         aria-hidden
-        className="absolute bottom-6 left-1/2 h-16 w-4/5 -translate-x-1/2 rounded-full bg-white/20 blur-2xl"
+        className="absolute bottom-6 left-1/2 h-12 w-3/5 -translate-x-1/2 rounded-full bg-white/8 blur-2xl"
       />
 
       <nav className="pointer-events-auto relative">
         {/* liquid-glass pill */}
-        <div className="relative flex items-center gap-1 rounded-full border border-white/25 bg-white/10 p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative flex items-center gap-1 rounded-full border border-white/15 bg-white/5 p-1.5 shadow-[0_8px_28px_rgba(0,0,0,0.4)] backdrop-blur-2xl backdrop-saturate-150">
           {/* soft top-gloss gradient */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-b from-white/35 via-white/5 to-transparent"
+            className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-b from-white/20 via-white/5 to-transparent"
           />
           {/* inner hairline highlight */}
           <div
@@ -68,7 +68,7 @@ export default function BottomNav({
                 {isActive && (
                   <span
                     aria-hidden
-                    className="absolute inset-0 rounded-full border border-white/40 bg-white/25 shadow-[inset_0_1px_1px_rgba(255,255,255,0.5),0_2px_8px_rgba(255,255,255,0.15)] backdrop-blur-md"
+                    className="absolute inset-0 rounded-full border border-white/25 bg-white/12 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] backdrop-blur-md"
                   />
                 )}
                 <span
