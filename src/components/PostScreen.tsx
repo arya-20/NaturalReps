@@ -50,17 +50,27 @@ export default function PostScreen({
 
   async function handleSave() {
     if (!parsed || parsed.exercises.length === 0) return;
+    setError("");
     const entry: WorkoutEntry = {
       ...parsed,
       id: crypto.randomUUID(),
       created_at: new Date().toISOString(),
       raw_text: text,
     };
-    await storage.save(entry);
-    setParsed(null);
-    setText("");
-    setSaved(true);
-    onSaved();
+    try {
+      await storage.save(entry);
+      setParsed(null);
+      setText("");
+      setSaved(true);
+      onSaved();
+    } catch (e) {
+      const code = (e as { code?: string })?.code;
+      setError(
+        code === "permission-denied"
+          ? "Couldn't save: Firestore rules not published. Publish firestore.rules in the Firebase console."
+          : `Couldn't save your workout${code ? ` (${code})` : ""}. Please try again.`
+      );
+    }
   }
 
   return (
