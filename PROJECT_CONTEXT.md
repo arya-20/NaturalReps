@@ -16,6 +16,9 @@ _A working brief for the app. Not committed secrets — keep real keys out of th
 | Original image on Desktop | moved to `Desktop/portfolio/images.png` |
 | OpenAI API key (server) | **Vercel** → Project → Settings → Environment Variables → `OPENAI_API_KEY` |
 | OpenAI API key (local dev) | `portfolio/gym-ai/.env.local` (git-ignored; copy from `.env.example`) |
+| Auth + database | **Firebase** → console.firebase.google.com (project `naturalreps`) |
+| Firebase config (local dev) | `.env.local` → `NEXT_PUBLIC_FIREBASE_*` |
+| Firebase config (production) | Vercel → Environment Variables → `NEXT_PUBLIC_FIREBASE_*` |
 | Deploy trigger | any `git push` to `main` → Vercel auto-deploys |
 | Headless screenshot tool (for visual checks) | Microsoft Edge at `/Applications/Microsoft Edge.app` (Chromium; use `--headless=new --screenshot=`) |
 
@@ -32,6 +35,7 @@ it installs to the home screen and can later be wrapped for the App Store.
 - Next.js (App Router) + TypeScript + Tailwind CSS
 - OpenAI `gpt-4o-mini` (JSON-schema structured output) via the `/api/parse` serverless route
 - Recharts (progress charts), IndexedDB (offline local history)
+- Firebase Auth (Google + email/password) + Cloud Firestore (per-user storage)
 - Inter (UI font) + JetBrains Mono (ASCII background)
 - Deployed on Vercel (auto-deploys on push to `main`)
 
@@ -72,10 +76,19 @@ WorkoutEntry {
 Weights always stored in **kg**; display converts to the chosen unit.
 
 ## OpenAI token setup
-1. Create a key at https://platform.openai.com/api-keys and add a little billing credit.
+
+### Buying tokens (credit)
+1. Go to https://platform.openai.com and sign in.
+2. Open **Settings → Billing** (https://platform.openai.com/account/billing).
+3. Click **Add payment method** and enter a card.
+4. Click **Add to credit balance** (or **Buy credits**) — a small amount like **$5–$10** lasts a very long time for this app.
+5. (Optional) Set a **monthly usage limit** under Billing → Limits so you never overspend.
+6. Credit is prepaid; when it runs out, parsing stops until you top up. `gpt-4o-mini` costs ~a fraction of a cent per workout log.
+
+### API key
+1. Create a key at https://platform.openai.com/api-keys → **Create new secret key** → copy it (shown once).
 2. **Local dev:** `cp .env.example .env.local` then set `OPENAI_API_KEY=sk-...` (`.env*` is git-ignored).
-3. **Vercel:** Project → Settings → Environment Variables → `OPENAI_API_KEY` (already configured for the live deploy). Re-deploy after changing.
-4. Cost: parsing is ~a fraction of a cent per log with `gpt-4o-mini`.
+3. **Vercel:** Project → Settings → Environment Variables → `OPENAI_API_KEY` (already configured for the live deploy). Redeploy after changing.
 
 ## Security posture (current PoC)
 - Per-IP rate limit (10 req/min) — **in-memory per serverless instance** (not global).
@@ -92,13 +105,18 @@ Swap the in-memory limiter for a shared store so limits hold across serverless i
 - Use **Upstash Redis** (free tier) + `@upstash/ratelimit`.
 - Env vars: `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`.
 
-### 2. Auth (Firebase) — enables accounts + cloud sync
-Currently local-only (IndexedDB). To let users log in and sync across devices:
-- **Firebase Auth** (Google sign-in + email/password). Create a Firebase project, enable providers, add the web app config.
-- Client SDK for sign-in; store the workouts in **Firestore** keyed by user id (mirror the current IndexedDB model).
-- Env/config: Firebase web config is public by design, but lock it down with **Firestore security rules** (users can only read/write their own docs) and App Check.
-- Migration: keep IndexedDB as the offline cache; sync to Firestore when signed in.
-- Decision: Firebase (fast, generous free tier) vs. staying serverless-only with a different provider. Firebase is the quickest path to auth + sync.
+### 2. Auth (Firebase) — DONE ✅
+Google + email/password login, per-user Firestore storage, sign-out. IndexedDB used as fallback when signed out.
+- Code: `lib/firebase.ts` (init), `lib/auth.tsx` (AuthProvider), `lib/firestore.ts` (per-user CRUD), `lib/useStorage.ts` (Firestore when signed in, else IndexedDB), `components/AuthScreen.tsx` (login/signup).
+- Data model in Firestore: `users/{uid}/workouts/{id}`.
+- Security rules: `firestore.rules` (users can only read/write their own docs).
+- Env vars (public config): `NEXT_PUBLIC_FIREBASE_*` in `.env.local` and Vercel.
+- **Firebase console setup that was required (record for reference):**
+  1. Authentication → Sign-in method → enable **Email/Password** and **Google** (set support email).
+  2. Firestore Database → create (europe-west2) → publish rules from `firestore.rules`.
+  3. Authentication → Settings → **Authorized domains** → add `natural-reps.vercel.app` (localhost already there). *This was the fix for Google sign-in failing.*
+- Google sign-in uses popup, falls back to redirect if the popup is blocked.
+- Firebase console: https://console.firebase.google.com (project `naturalreps`).
 
 ### 3. Product polish
 - Screenshot/GIF into `docs/screenshot.png` for the README.

@@ -8,7 +8,7 @@ Everything this app uses and where to find it.
 | **GitHub** | Source code repo | https://github.com/arya-20/NaturalReps | arya-20 |
 | **Vercel** | Hosting + serverless API + deploys | https://natural-reps.vercel.app (dashboard: vercel.com) | GitHub sign-in |
 | **OpenAI** | Natural-language parsing (`gpt-4o-mini`) | https://platform.openai.com | personal account + billing |
-| **Firebase** (to be set up) | Auth + Firestore database | https://console.firebase.google.com | Google account |
+| **Firebase** | Auth (Google + email/pw) + Firestore database | https://console.firebase.google.com — project `naturalreps` | Google account (aryagurjar20@gmail.com) |
 
 ## Keys / config
 | Secret | Stored where |
