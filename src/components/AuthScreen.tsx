@@ -127,7 +127,13 @@ function friendly(err: unknown): string {
       return "Password must be at least 6 characters.";
     case "auth/popup-closed-by-user":
       return "Sign-in cancelled.";
+    case "auth/popup-blocked":
+      return "Popup blocked — allow popups and try again.";
+    case "auth/unauthorized-domain":
+      return "This domain isn't authorized in Firebase (Auth → Settings → Authorized domains).";
+    case "auth/operation-not-allowed":
+      return "Google sign-in isn't enabled in Firebase (Auth → Sign-in method).";
     default:
-      return "Something went wrong. Please try again.";
+      return code ? `Sign-in error: ${code}` : "Something went wrong. Please try again.";
   }
 }
