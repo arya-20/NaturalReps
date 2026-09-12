@@ -1,18 +1,19 @@
 "use client";
 
 import { WorkoutEntry } from "@/lib/types";
-import { deleteWorkout } from "@/lib/storage";
 import WorkoutView from "@/components/WorkoutView";
 
 export default function HomeScreen({
   history,
   onChanged,
+  storage,
 }: {
   history: WorkoutEntry[];
   onChanged: () => void;
+  storage: { remove: (id: string) => Promise<void> };
 }) {
   async function handleDelete(id: string) {
-    await deleteWorkout(id);
+    await storage.remove(id);
     onChanged();
   }
 

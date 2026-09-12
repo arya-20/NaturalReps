@@ -2,10 +2,12 @@
 
 import { WorkoutEntry } from "@/lib/types";
 import { useSettings } from "@/lib/settings";
+import { useAuth } from "@/lib/auth";
 import ProgressCharts from "@/components/ProgressCharts";
 
 export default function ProfileScreen({ history }: { history: WorkoutEntry[] }) {
   const { unit, setUnit } = useSettings();
+  const { user, signOut } = useAuth();
 
   const totalWorkouts = history.length;
   const totalSets = history.reduce(
@@ -24,8 +26,16 @@ export default function ProfileScreen({ history }: { history: WorkoutEntry[] }) 
         </div>
         <div>
           <h2 className="text-2xl font-bold">Athlete</h2>
-          <p className="text-sm text-neutral-400">Local profile · no account yet</p>
+          <p className="text-sm text-neutral-400">
+            {user?.email ?? "Signed in"}
+          </p>
         </div>
+        <button
+          onClick={() => signOut()}
+          className="ml-auto rounded-xl border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-neutral-300 backdrop-blur hover:text-white"
+        >
+          Sign out
+        </button>
       </div>
 
       <div className="mb-6 grid grid-cols-3 gap-3">

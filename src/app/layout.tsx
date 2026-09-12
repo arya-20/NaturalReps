@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SettingsProvider } from "@/lib/settings";
+import { AuthProvider } from "@/lib/auth";
 import AsciiBackground from "@/components/AsciiBackground";
 
 const inter = Inter({
@@ -45,7 +46,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {/* subtle darkening for text legibility over the background */}
           <div className="pointer-events-none absolute inset-0 z-[1] bg-black/35" />
           <div className="relative z-10 flex min-h-dvh flex-1 flex-col">
-            <SettingsProvider>{children}</SettingsProvider>
+            <SettingsProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </SettingsProvider>
           </div>
         </div>
       </body>

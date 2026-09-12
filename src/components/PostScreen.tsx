@@ -2,14 +2,19 @@
 
 import { useCallback, useState } from "react";
 import { ParsedWorkout, WorkoutEntry } from "@/lib/types";
-import { saveWorkout } from "@/lib/storage";
 import WorkoutView from "@/components/WorkoutView";
 import { useVoiceInput } from "@/lib/useVoiceInput";
 
 const EXAMPLE =
   "4 sets of lat pull down, first set was warm up with 50kg 10 reps, then 3 sets 60, 65 and 70kg, all 8 reps, last one to failure";
 
-export default function PostScreen({ onSaved }: { onSaved: () => void }) {
+export default function PostScreen({
+  onSaved,
+  storage,
+}: {
+  onSaved: () => void;
+  storage: { save: (e: WorkoutEntry) => Promise<void> };
+}) {
   const [text, setText] = useState("");
   const [parsed, setParsed] = useState<ParsedWorkout | null>(null);
   const [loading, setLoading] = useState(false);
@@ -51,7 +56,7 @@ export default function PostScreen({ onSaved }: { onSaved: () => void }) {
       created_at: new Date().toISOString(),
       raw_text: text,
     };
-    await saveWorkout(entry);
+    await storage.save(entry);
     setParsed(null);
     setText("");
     setSaved(true);
