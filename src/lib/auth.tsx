@@ -11,6 +11,8 @@ import {
   User,
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -34,6 +36,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Complete any redirect-based sign-in that was in progress.
+    getRedirectResult(auth).catch(() => {});
     return onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
@@ -41,7 +45,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signInGoogle = async () => {
-    await signInWithPopup(auth, new GoogleAuthProvider());
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      const code = (err as { code?: string })?.code ?? "";
+      // If the popup is blocked/closed/unsupported, fall back to redirect
+      // (more reliable, especially on mobile/installed PWAs).
+      if (
+        code === "auth/popup-blocked" ||
+        code === "auth/popup-closed-by-user" ||
+        code === "auth/cancelled-popup-request" ||
+        code === "auth/operation-not-supported-in-this-environment"
+      ) {
+        await signInWithRedirect(auth, provider);
+        return;
+      }
+      throw err;
+    }
   };
   const signInEmail = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
